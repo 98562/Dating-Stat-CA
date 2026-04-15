@@ -213,10 +213,10 @@ The reusable UI lives in [`components/share/share-actions.tsx`](/C:/Users/Tony/D
 User-facing share actions:
 
 - `Share image`
-  - on supported browsers/devices, fetches the generated share-card image and opens the native share sheet with image + text + compact link
+  - on supported browsers/devices, generates the share-card image client-side and opens the native share sheet with image + text + compact link
   - whether Instagram or Stories appears is up to the device/browser share sheet, not the web app
 - `Download image`
-  - downloads the generated portrait share card image
+  - downloads a client-generated portrait share card image
   - fallback when native file sharing is unavailable
 - `Copy link`
   - copies the compact `/s/...` link only
@@ -241,9 +241,9 @@ Share-image and social-preview routes:
 - [`app/s/[payload]/opengraph-image.tsx`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/app/s/%5Bpayload%5D/opengraph-image.tsx)
   - generates the server-side landscape preview used by link scrapers and social cards
 - [`app/s/[payload]/share-image/route.tsx`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/app/s/%5Bpayload%5D/share-image/route.tsx)
-  - generates a portrait image for download and native image sharing from mobile/desktop browsers
+  - keeps a server-side portrait image path available for shared-result URLs, but the live app no longer depends on it for ordinary mobile sharing
 - [`lib/share/shareImage.ts`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/lib/share/shareImage.ts)
-  - handles image download plus native image sharing with graceful fallback
+  - handles client-side image generation, download, and native image sharing with graceful fallback
 
 Limitations to keep in mind:
 

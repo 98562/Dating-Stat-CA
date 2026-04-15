@@ -19,6 +19,7 @@ import { faqItems } from "@/content/faq";
 import { buildMetadata } from "@/lib/seo/metadata";
 import { decodeFilters } from "@/lib/filter-query";
 import { buildManualAssumptions, loadNormalizedDataset } from "@/lib/data/loaders";
+import { getInitialViewportMode } from "@/lib/request-device";
 
 export const metadata = buildMetadata({
   title: seoConfig.productName,
@@ -34,6 +35,7 @@ export default async function Page({
   const defaults = buildManualAssumptions();
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const initialFilters = decodeFilters(resolvedSearchParams, defaults);
+  const initialViewportMode = await getInitialViewportMode();
 
   try {
     const dataset = await loadNormalizedDataset();
@@ -105,7 +107,12 @@ export default async function Page({
             description="Set the main filters here, get a compact read immediately, and open the full calculator if you want the deeper breakdown."
             className="mb-6"
           />
-          <CalculatorShell dataset={dataset} initialFilters={initialFilters} mode="preview" />
+          <CalculatorShell
+            dataset={dataset}
+            initialFilters={initialFilters}
+            initialViewportMode={initialViewportMode}
+            mode="preview"
+          />
         </section>
 
         <section className="mt-16">

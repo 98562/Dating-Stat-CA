@@ -62,8 +62,8 @@ export default function PrivacyPage() {
       paragraphs: legalLinks.privacyEmailHref
         ? ["Privacy questions can be sent to the contact listed below."]
         : legalLinks.supportHref
-          ? ["A public support link is available for privacy-related questions."]
-          : ["The site does not currently publish a dedicated privacy inbox."]
+          ? ["Privacy-related questions can be sent through the public contact link."]
+          : ["Privacy questions can be directed through the site's published contact channel when one is available."]
     },
     {
       title: "Changes to this page",
@@ -107,7 +107,10 @@ export default function PrivacyPage() {
                 Use the support link for privacy questions
               </Link>
             ) : (
-              <p>No dedicated privacy inbox is listed for this launch.</p>
+              <p>
+                If a public contact method is added later, privacy questions can be routed
+                through it.
+              </p>
             )}
           </CardContent>
         </Card>

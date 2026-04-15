@@ -3,6 +3,7 @@ import { MissingDatasetState } from "@/components/content/dataset-state";
 import { SectionHeading } from "@/components/content/section-heading";
 import { buildManualAssumptions, loadNormalizedDataset } from "@/lib/data/loaders";
 import { decodeFilters } from "@/lib/filter-query";
+import { getInitialViewportMode } from "@/lib/request-device";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export const metadata = buildMetadata({
@@ -20,6 +21,7 @@ export default async function CalculatorPage({
   const resolvedSearchParams = searchParams ? await searchParams : {};
   const defaults = buildManualAssumptions();
   const initialFilters = decodeFilters(resolvedSearchParams, defaults);
+  const initialViewportMode = await getInitialViewportMode();
 
   try {
     const dataset = await loadNormalizedDataset();
@@ -32,7 +34,12 @@ export default async function CalculatorPage({
           description="This view keeps the detailed calculation log, source notes, and methodology notes close at hand."
           className="mb-8"
         />
-        <CalculatorShell dataset={dataset} initialFilters={initialFilters} mode="full" />
+        <CalculatorShell
+          dataset={dataset}
+          initialFilters={initialFilters}
+          initialViewportMode={initialViewportMode}
+          mode="full"
+        />
       </div>
     );
   } catch {

@@ -11,6 +11,7 @@ export const metadata = buildMetadata({
 });
 
 export default function TermsPage() {
+  const hasSiteDetails = Boolean(legalConfig.operatorName || legalConfig.governingLaw);
   const sections = [
     {
       title: "Overview",
@@ -72,15 +73,17 @@ export default function TermsPage() {
         description="Plain-language terms for a small public web app."
         className="mb-8"
       />
-      <Card className="mb-8">
-        <CardHeader>
-          <CardTitle>Site details</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-2 pt-0 text-sm text-ink-600">
-          <p>Site owner: {legalConfig.operatorName}</p>
-          <p>Governing law: {legalConfig.governingLaw}.</p>
-        </CardContent>
-      </Card>
+      {hasSiteDetails ? (
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle>Site details</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2 pt-0 text-sm text-ink-600">
+            {legalConfig.operatorName ? <p>Site operator: {legalConfig.operatorName}</p> : null}
+            {legalConfig.governingLaw ? <p>Governing law: {legalConfig.governingLaw}.</p> : null}
+          </CardContent>
+        </Card>
+      ) : null}
       <div className="grid gap-4">
         {sections.map((section) => (
           <Card key={section.title}>

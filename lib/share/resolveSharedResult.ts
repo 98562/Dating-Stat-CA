@@ -1,8 +1,10 @@
+import { cache } from "react";
+
 import { calculateProbability } from "@/lib/calculator";
 import { buildManualAssumptions, loadNormalizedDataset } from "@/lib/data/loaders";
 import { decodeShareState } from "@/lib/share/decodeState";
 
-export async function resolveSharedResult(payload: string) {
+export const resolveSharedResult = cache(async (payload: string) => {
   const defaults = buildManualAssumptions();
   const decoded = decodeShareState(payload, defaults);
 
@@ -32,4 +34,4 @@ export async function resolveSharedResult(payload: string) {
       result: null
     };
   }
-}
+});

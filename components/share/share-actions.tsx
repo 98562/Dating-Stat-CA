@@ -7,7 +7,6 @@ import { ResultShareCard } from "@/components/share/result-share-card";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { buildShareDescription, buildShareSummary } from "@/lib/share/buildShareSummary";
-import { buildShareImageUrl } from "@/lib/share/buildShareImageUrl";
 import { buildShareUrl } from "@/lib/share/buildShareUrl";
 import { buildSharePreview } from "@/lib/share/buildSharePreview";
 import { downloadShareImage, shareImage } from "@/lib/share/shareImage";
@@ -30,7 +29,6 @@ export function ShareActions({
 }: ShareActionsProps) {
   const [status, setStatus] = useState("");
   const shareUrl = useMemo(() => buildShareUrl(filters), [filters]);
-  const imageUrl = useMemo(() => buildShareImageUrl(filters, "story"), [filters]);
   const shareSummary = useMemo(() => buildShareSummary(filters, result), [filters, result]);
   const shareDescription = useMemo(
     () => buildShareDescription(filters, result),
@@ -57,8 +55,8 @@ export function ShareActions({
       title: sharePreview.title,
       text: shareDescription,
       url: shareUrl,
-      imageUrl,
-      filename: imageFilename
+      filename: imageFilename,
+      preview: sharePreview
     });
 
     if (outcome === "shared") {
@@ -89,11 +87,14 @@ export function ShareActions({
   }
 
   async function handleDownloadImage() {
-    const downloaded = await downloadShareImage(imageUrl, imageFilename);
+    const downloaded = await downloadShareImage({
+      filename: imageFilename,
+      preview: sharePreview
+    });
     setStatus(
       downloaded
         ? "Share card image downloaded."
-        : "Opened the share image directly because download handling was limited in this browser."
+        : "The share card image could not be prepared in this browser."
     );
   }
 

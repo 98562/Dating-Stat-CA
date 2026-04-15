@@ -286,7 +286,7 @@ Key modules:
 - [`lib/share/buildShareSummary.ts`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/lib/share/buildShareSummary.ts)
   - generates the short human-readable text used for `Copy summary` and native sharing
 - [`lib/share/shareImage.ts`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/lib/share/shareImage.ts)
-  - downloads or native-shares the generated share card image with fallback behavior
+  - generates the share card image client-side, then downloads or native-shares it with fallback behavior
 - [`components/share/share-actions.tsx`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/components/share/share-actions.tsx)
   - the reusable UI for `Share image`, `Download image`, `Copy summary`, and `Copy link`
 - [`components/share/share-image-template.tsx`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/components/share/share-image-template.tsx)
@@ -299,6 +299,7 @@ Why this shape was chosen:
 - easy to version later
 - keeps the readable internal URL-state system intact for live editing and debugging
 - uses progressive enhancement for mobile image sharing instead of pretending the web can directly post to Instagram Stories
+- keeps ordinary download/share actions off the Worker-heavy server image route, which reduces pressure on Cloudflare runtime limits
 
 ## Compatibility notes
 

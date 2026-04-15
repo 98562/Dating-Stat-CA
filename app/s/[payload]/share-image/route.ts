@@ -6,6 +6,10 @@ import { siteConfig } from "@/config/site";
 import { buildSharePreview } from "@/lib/share/buildSharePreview";
 import { resolveSharedResult } from "@/lib/share/resolveSharedResult";
 
+const IMAGE_CACHE_HEADERS = {
+  "cache-control": "public, max-age=0, s-maxage=86400, stale-while-revalidate=604800"
+};
+
 export async function GET(
   _request: Request,
   context: { params: Promise<{ payload: string }> }
@@ -35,8 +39,9 @@ export async function GET(
       variant: "story"
     }),
     {
-      width: 1080,
-      height: 1920
+      width: 720,
+      height: 1280,
+      headers: IMAGE_CACHE_HEADERS
     }
   );
 }

@@ -19,16 +19,19 @@ import { encodeFilters } from "@/lib/filter-query";
 import { buildCustomManualAssumption } from "@/lib/manual-assumptions";
 import { PRESETS } from "@/config/presets";
 import type { CalculatorFilters, NormalizedDataset } from "@/lib/types";
+import type { ViewportMode } from "@/lib/request-device";
 
 interface CalculatorShellProps {
   dataset: NormalizedDataset;
   initialFilters: CalculatorFilters;
+  initialViewportMode: ViewportMode;
   mode?: "preview" | "full";
 }
 
 export function CalculatorShell({
   dataset,
   initialFilters,
+  initialViewportMode,
   mode = "full"
 }: CalculatorShellProps) {
   const pathname = usePathname();
@@ -36,6 +39,21 @@ export function CalculatorShell({
   const [sourcesOpen, setSourcesOpen] = useState(false);
   const [filters, setFilters] = useState(initialFilters);
   const [activePresetId, setActivePresetId] = useState("");
+  const [viewportMode, setViewportMode] = useState<ViewportMode>(initialViewportMode);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1024px)");
+    const syncViewportMode = () => {
+      setViewportMode(mediaQuery.matches ? "desktop" : "mobile");
+    };
+
+    syncViewportMode();
+    mediaQuery.addEventListener("change", syncViewportMode);
+
+    return () => {
+      mediaQuery.removeEventListener("change", syncViewportMode);
+    };
+  }, []);
 
   useEffect(() => {
     setFilters(initialFilters);
@@ -281,14 +299,17 @@ export function CalculatorShell({
 
   return (
     <>
-      <DesktopCalculatorLayout
-        filterPanelProps={filterPanelProps}
-        resultsPanelProps={resultsPanelProps}
-      />
-      <MobileCalculatorLayout
-        filterPanelProps={filterPanelProps}
-        resultsPanelProps={resultsPanelProps}
-      />
+      {viewportMode === "desktop" ? (
+        <DesktopCalculatorLayout
+          filterPanelProps={filterPanelProps}
+          resultsPanelProps={resultsPanelProps}
+        />
+      ) : (
+        <MobileCalculatorLayout
+          filterPanelProps={filterPanelProps}
+          resultsPanelProps={resultsPanelProps}
+        />
+      )}
 
       <Dialog
         open={methodologyOpen}

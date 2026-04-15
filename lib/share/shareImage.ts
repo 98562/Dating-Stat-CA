@@ -1,49 +1,35 @@
+import type { SharePreviewData } from "@/lib/share/buildSharePreview";
 import { canNativeShare } from "@/lib/share/canNativeShare";
+import { renderShareCardImageFile } from "@/lib/share/renderShareCardImage";
 import { shareResult, type NativeShareOutcome } from "@/lib/share/shareResult";
 
-export type NativeImageShareOutcome =
-  | NativeShareOutcome
-  | "file-unsupported";
+export type NativeImageShareOutcome = NativeShareOutcome | "file-unsupported";
 
 interface ShareImageOptions {
   title: string;
   text: string;
   url: string;
-  imageUrl: string;
   filename: string;
+  preview: SharePreviewData;
 }
 
-async function fetchImageFile(imageUrl: string, filename: string) {
-  const response = await fetch(imageUrl);
-  if (!response.ok) {
-    throw new Error("image-fetch-failed");
-  }
-
-  const blob = await response.blob();
-  return new File([blob], filename, {
-    type: blob.type || "image/png"
-  });
+function triggerDownload(file: File) {
+  const objectUrl = URL.createObjectURL(file);
+  const anchor = document.createElement("a");
+  anchor.href = objectUrl;
+  anchor.download = file.name;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(objectUrl);
 }
 
-export async function downloadShareImage(imageUrl: string, filename: string) {
+export async function downloadShareImage(options: Pick<ShareImageOptions, "filename" | "preview">) {
   try {
-    const response = await fetch(imageUrl);
-    if (!response.ok) {
-      throw new Error("image-fetch-failed");
-    }
-
-    const blob = await response.blob();
-    const objectUrl = URL.createObjectURL(blob);
-    const anchor = document.createElement("a");
-    anchor.href = objectUrl;
-    anchor.download = filename;
-    document.body.appendChild(anchor);
-    anchor.click();
-    anchor.remove();
-    URL.revokeObjectURL(objectUrl);
+    const file = await renderShareCardImageFile(options.preview, options.filename);
+    triggerDownload(file);
     return true;
   } catch {
-    window.open(imageUrl, "_blank", "noopener,noreferrer");
     return false;
   }
 }
@@ -54,7 +40,7 @@ export async function shareImage(options: ShareImageOptions): Promise<NativeImag
   }
 
   try {
-    const file = await fetchImageFile(options.imageUrl, options.filename);
+    const file = await renderShareCardImageFile(options.preview, options.filename);
     const payload = {
       title: options.title,
       text: options.text,

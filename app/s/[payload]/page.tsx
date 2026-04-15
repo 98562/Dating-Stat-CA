@@ -12,6 +12,7 @@ import { buildSharePreview } from "@/lib/share/buildSharePreview";
 import { buildShareDescription } from "@/lib/share/buildShareSummary";
 import { buildShareImagePathFromPayload } from "@/lib/share/buildShareImageUrl";
 import { resolveSharedResult } from "@/lib/share/resolveSharedResult";
+import { getInitialViewportMode } from "@/lib/request-device";
 import { buildMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata({
@@ -54,6 +55,7 @@ export default async function SharedCalculatorPage({
 }) {
   const { payload } = await params;
   const shared = await resolveSharedResult(payload);
+  const initialViewportMode = await getInitialViewportMode();
 
   if (!shared.dataset) {
     return (
@@ -94,7 +96,12 @@ export default async function SharedCalculatorPage({
             </Link>
           </CardContent>
         </Card>
-        <CalculatorShell dataset={shared.dataset} initialFilters={shared.decoded.filters} mode="full" />
+        <CalculatorShell
+          dataset={shared.dataset}
+          initialFilters={shared.decoded.filters}
+          initialViewportMode={initialViewportMode}
+          mode="full"
+        />
       </div>
     );
   }
@@ -107,7 +114,12 @@ export default async function SharedCalculatorPage({
         description={`This link restores the same calculator setup in the full calculator while keeping age ranges at ${productConfig.minimumAge}+.`}
         className="mb-8"
       />
-      <CalculatorShell dataset={shared.dataset} initialFilters={shared.decoded.filters} mode="full" />
+      <CalculatorShell
+        dataset={shared.dataset}
+        initialFilters={shared.decoded.filters}
+        initialViewportMode={initialViewportMode}
+        mode="full"
+      />
     </div>
   );
 }
