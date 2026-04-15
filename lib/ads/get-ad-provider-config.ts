@@ -2,10 +2,7 @@ import { monetizationConfig } from "@/config/monetization";
 
 export function getAdProviderConfig() {
   const clientId = monetizationConfig.adsense.clientId.trim();
-  const shouldInitialize =
-    monetizationConfig.adsEnabled &&
-    monetizationConfig.advertisingEnabled &&
-    Boolean(clientId);
+  const shouldInitialize = Boolean(clientId);
 
   return {
     provider: monetizationConfig.adProvider,

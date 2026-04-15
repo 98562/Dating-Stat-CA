@@ -10,7 +10,8 @@ export const monetizationConfig = {
   advertisingEnabled: launchConfig.advertisingEnabled,
   adProvider: "adsense",
   adsense: {
-    clientId: process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ?? "",
+    clientId:
+      process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID ?? "ca-pub-3551910585385482",
     scriptSrc: "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"
   }
 } as const;
