@@ -6,3 +6,8 @@ dist
 *.err
 .localhost-home.html
 tmp-statcan.zip
+.open-next
+.wrangler
+.dev.vars*
+!.dev.vars.example
+cloudflare-env.d.ts

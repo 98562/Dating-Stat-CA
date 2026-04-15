@@ -2,7 +2,6 @@ import { ImageResponse } from "next/og";
 
 import { SocialImage } from "@/components/brand/social-image";
 
-export const runtime = "edge";
 export const alt = "Canada Dating Pool Calculator";
 export const size = {
   width: 1200,
