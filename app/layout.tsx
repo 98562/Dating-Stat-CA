@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { Fraunces, Manrope } from "next/font/google";
 
 import "@/app/globals.css";
-import { AdProvider } from "@/components/ads/ad-provider";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { monetizationConfig } from "@/config/monetization";
 import { siteConfig } from "@/config/site";
 
 const fraunces = Fraunces({
@@ -62,10 +62,19 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const adsenseClientId = monetizationConfig.adsense.clientId.trim();
+  const adsenseSrc = adsenseClientId
+    ? `${monetizationConfig.adsense.scriptSrc}?client=${adsenseClientId}`
+    : null;
+
   return (
     <html lang="en">
+      <head>
+        {adsenseSrc ? (
+          <script async src={adsenseSrc} crossOrigin="anonymous" />
+        ) : null}
+      </head>
       <body className={`${fraunces.variable} ${manrope.variable} bg-sand-100 text-ink-900`}>
-        <AdProvider />
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-full focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-ink-900 focus:shadow-soft"
