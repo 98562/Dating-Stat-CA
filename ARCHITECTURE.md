@@ -74,6 +74,14 @@ Sharing is a parallel layer on top of that:
 6. If decoding fails, the route renders a calm recovery state instead of crashing.
 7. If an older state tries to go below the public minimum age, decoding clamps it back to 18+.
 
+### Deployment dataset boundary
+
+For deployment, the app reads the bundled normalized snapshot at [`data/normalized/calculator-dataset.json`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/data/normalized/calculator-dataset.json) rather than opening raw CSV files at runtime.
+
+That snapshot is generated from the raw Statistics Canada extracts by [`scripts/generate-calculator-dataset.ts`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/scripts/generate-calculator-dataset.ts), which calls the shared normalization path in [`lib/data/loaders.ts`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/lib/data/loaders.ts).
+
+This keeps the live runtime compatible with serverless and Cloudflare Workers deployments, where direct runtime filesystem access to large raw source folders is not a safe assumption.
+
 ## Calculator engine boundaries
 
 The engine is intentionally separate from the presentation layer.
@@ -298,6 +306,13 @@ The project manifest now targets Next.js 15 and React 19.
 
 Page routes are written in a way that is compatible with Next.js 15 App Router expectations, including async route props and metadata helpers.
 
+The repo also includes an OpenNext Cloudflare deployment path:
+
+- [`open-next.config.ts`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/open-next.config.ts)
+- [`wrangler.jsonc`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/wrangler.jsonc)
+
+If deploying on Cloudflare Workers, the build should use `npm run cf:build` so the OpenNext output is produced before `wrangler deploy`.
+
 ## Launch checklist
 
 - review Privacy, Terms, FAQ, and About copy before publication
@@ -305,3 +320,4 @@ Page routes are written in a way that is compatible with Next.js 15 App Router e
 - verify footer links work on desktop and mobile
 - verify the support/legal pages remain readable on narrow mobile widths
 - verify no placeholder or operator-facing text remains in the public UI
+- verify deployment environments that use Workers or serverless runtimes are consuming the bundled normalized dataset rather than expecting raw CSV access at runtime

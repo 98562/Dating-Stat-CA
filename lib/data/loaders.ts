@@ -1,13 +1,9 @@
-import { readFile } from "node:fs/promises";
-import path from "node:path";
-
 import comparisonPlaces from "@/data/normalized/comparison-places.json";
 import drinkingRiskSurvey from "@/data/normalized/drinking-risk-cchs-2023.json";
 import manualAssumptionDefinitions from "@/data/normalized/manual-assumptions.json";
 import populationEstimatesFile from "@/data/normalized/latest-population-estimates.json";
 import { POPULATION_GROUPS } from "@/config/filters/ethnicity";
 import { GEO_ORDER, SOURCE_CATALOG, STATCAN_LABEL_TO_GEO } from "@/lib/constants";
-import { parseCsv } from "@/lib/data/csv";
 import type {
   AgeBucket,
   ManualAssumptionDefinition,
@@ -301,184 +297,196 @@ function sumIntoTarget<T extends Record<string, number>>(
   target[key] = ((target[key] ?? 0) + value) as T[keyof T];
 }
 
-async function loadFile(relativePath: string) {
-  return readFile(path.join(process.cwd(), relativePath), "utf8");
-}
-
 let cachedDataset: Promise<NormalizedDataset> | null = null;
+
+export async function buildDatasetFromRawFiles(
+  options?: {
+    loadFile?: (relativePath: string) => Promise<string>;
+    parseCsv?: <T extends Record<string, string>>(content: string) => Promise<T[]>;
+  }
+): Promise<NormalizedDataset> {
+  const loadFile = options?.loadFile;
+  const parseCsv = options?.parseCsv;
+
+  if (!loadFile || !parseCsv) {
+    throw new Error("buildDatasetFromRawFiles requires loadFile and parseCsv helpers.");
+  }
+
+  const datasetTemplate = createDatasetTemplate();
+
+  const [maritalCsv, educationCsv, incomeCsv, ethnicityCsv, languageCsv] = await Promise.all([
+    loadFile("data/raw/98100128-eng/98100128.csv"),
+    loadFile("data/raw/98100384-eng/98100384.csv"),
+    loadFile("data/raw/98100064-eng/98100064.csv"),
+    loadFile("data/raw/98100351-eng/98100351.csv"),
+    loadFile("data/raw/98100222-eng/98100222.csv")
+  ]);
+
+  const maritalRows = await parseCsv<Record<string, string>>(maritalCsv);
+  const educationRows = await parseCsv<Record<string, string>>(educationCsv);
+  const incomeRows = await parseCsv<Record<string, string>>(incomeCsv);
+  const ethnicityRows = await parseCsv<Record<string, string>>(ethnicityCsv);
+  const languageRows = await parseCsv<Record<string, string>>(languageCsv);
+
+  for (const row of maritalRows) {
+    const geo = STATCAN_LABEL_TO_GEO[normalizeLabel(readColumn(row, "GEO"))];
+    const gender = mapGender(readColumn(row, "Gender (3a)"));
+    const maritalStatus = normalizeLabel(readColumn(row, "Marital status (13)"));
+
+    if (!geo || !gender || !datasetTemplate.maritalAgeGender[geo][gender][maritalStatus]) {
+      continue;
+    }
+
+    for (let index = 0; index < MARITAL_AGE_BUCKETS.length; index += 1) {
+      const bucket = MARITAL_AGE_BUCKETS[index];
+      const column = `Age (16):${bucket.label}[${index + 2}]`;
+      datasetTemplate.maritalAgeGender[geo][gender][maritalStatus][bucket.id] = toNumber(
+        readColumn(row, column)
+      );
+    }
+  }
+
+  for (const row of educationRows) {
+    const geo = STATCAN_LABEL_TO_GEO[normalizeLabel(readColumn(row, "GEO"))];
+    const gender = mapGender(readColumn(row, "Gender (3a)"));
+    const ageKey = normalizeLabel(readColumn(row, "Age (15A)")) as (typeof EDUCATION_AGE_KEYS)[number];
+    const band = mapEducationBand(readColumn(row, "Highest certificate, diploma or degree (15)"));
+
+    if (!geo || !gender || !EDUCATION_AGE_KEYS.includes(ageKey) || !band) continue;
+    if (normalizeLabel(readColumn(row, "Statistics (2A)")) !== "Count") continue;
+
+    const count = toNumber(readColumn(row, "Census year (4):2021[1]"));
+
+    if (band === "total") {
+      datasetTemplate.educationAgeGender[geo][gender][ageKey].total = count;
+      continue;
+    }
+
+    sumIntoTarget(datasetTemplate.educationAgeGender[geo][gender][ageKey], band, count);
+
+    if (band === "professional_degree" || band === "doctorate") {
+      sumIntoTarget(
+        datasetTemplate.educationAgeGender[geo][gender][ageKey],
+        "masters_plus",
+        count
+      );
+    }
+  }
+
+  for (const row of incomeRows) {
+    const geo = STATCAN_LABEL_TO_GEO[normalizeLabel(readColumn(row, "GEO"))];
+    const gender = mapGender(readColumn(row, "Gender (3a)"));
+    const ageKey = normalizeLabel(readColumn(row, "Age (11)")) as (typeof INCOME_AGE_KEYS)[number];
+    const group = normalizeLabel(readColumn(row, "Total income groups (24)"));
+    const count = toNumber(readColumn(row, "Year (2):2020[1]"));
+
+    if (!geo || !gender || !INCOME_AGE_KEYS.includes(ageKey)) continue;
+
+    if (group === "Total - Total income") {
+      datasetTemplate.incomeAgeGender[geo][gender][ageKey].total = count;
+      continue;
+    }
+
+    if (
+      group.startsWith("Median") ||
+      group.startsWith("Percentage") ||
+      group === "With total income" ||
+      group === "Without total income"
+    ) {
+      continue;
+    }
+
+    const numbers =
+      group.match(/\d[\d,]*/g)?.map((item) => Number(item.replaceAll(",", ""))) ?? [];
+    const lower = numbers[0] ?? 0;
+
+    if (lower >= 50000) datasetTemplate.incomeAgeGender[geo][gender][ageKey]["50k_plus"] += count;
+    if (lower >= 80000) datasetTemplate.incomeAgeGender[geo][gender][ageKey]["80k_plus"] += count;
+    if (lower >= 100000)
+      datasetTemplate.incomeAgeGender[geo][gender][ageKey]["100k_plus"] += count;
+    if (lower >= 150000)
+      datasetTemplate.incomeAgeGender[geo][gender][ageKey]["150k_plus"] += count;
+  }
+
+  for (const row of ethnicityRows) {
+    const geo = STATCAN_LABEL_TO_GEO[normalizeLabel(readColumn(row, "GEO"))];
+    const gender = mapGender(readColumn(row, "Gender (3)"));
+    const ageKey = normalizeLabel(readColumn(row, "Age (15C)")) as (typeof ETHNICITY_AGE_KEYS)[number];
+    const statistic = normalizeLabel(readColumn(row, "Statistics (2)"));
+
+    if (!geo || !gender || !ETHNICITY_AGE_KEYS.includes(ageKey)) continue;
+    if (statistic !== "2021 Counts") continue;
+
+    datasetTemplate.ethnicityAgeGender[geo][gender][ageKey].total = toNumber(
+      readColumn(row, "Visible minority (15):Total - Visible minority[1]")
+    );
+
+    for (const group of POPULATION_GROUPS) {
+      datasetTemplate.ethnicityAgeGender[geo][gender][ageKey][group.key] = toNumber(
+        readVisibleMinorityColumn(row, group.sourceColumn)
+      );
+    }
+  }
+
+  for (const row of languageRows) {
+    const geo = STATCAN_LABEL_TO_GEO[normalizeLabel(readColumn(row, "GEO"))];
+    const ageKey = normalizeLabel(readColumn(row, "Age (13B)")) as (typeof LANGUAGE_AGE_KEYS)[number];
+    const knowledge = normalizeLabel(readColumn(row, "Knowledge of official languages (5)"));
+    const count = toNumber(readColumn(row, "Statistics (6A):2021 Counts[1]"));
+
+    if (!geo || !LANGUAGE_AGE_KEYS.includes(ageKey)) continue;
+
+    if (knowledge === "Total - Knowledge of official languages") {
+      datasetTemplate.languageAge[geo][ageKey].total = count;
+    }
+
+    if (knowledge === "English only") {
+      datasetTemplate.languageAge[geo][ageKey].english += count;
+    }
+
+    if (knowledge === "French only") {
+      datasetTemplate.languageAge[geo][ageKey].french += count;
+    }
+
+    if (knowledge === "English and French") {
+      datasetTemplate.languageAge[geo][ageKey].bilingual += count;
+      datasetTemplate.languageAge[geo][ageKey].english += count;
+      datasetTemplate.languageAge[geo][ageKey].french += count;
+    }
+  }
+
+  return {
+    generatedLabel: `${populationEstimatesFile.referenceDate} data snapshot`,
+    populationEstimates: populationEstimatesFile.estimates,
+    ageBuckets: MARITAL_AGE_BUCKETS,
+    comparisonPlaces,
+    manualAssumptions: manualAssumptionDefinitions as ManualAssumptionDefinition[],
+    sources: {
+      population: SOURCE_CATALOG.population,
+      marital: SOURCE_CATALOG.marital,
+      education: SOURCE_CATALOG.education,
+      income: SOURCE_CATALOG.income,
+      ethnicity: SOURCE_CATALOG.ethnicity,
+      drinking: SOURCE_CATALOG.drinking,
+      height: SOURCE_CATALOG.height,
+      language: SOURCE_CATALOG.language,
+      manual: SOURCE_CATALOG.manual
+    },
+    maritalAgeGender: datasetTemplate.maritalAgeGender,
+    educationAgeGender: datasetTemplate.educationAgeGender,
+    incomeAgeGender: datasetTemplate.incomeAgeGender,
+    ethnicityAgeGender: datasetTemplate.ethnicityAgeGender,
+    drinkingRisk: drinkingRiskSurvey,
+    languageAge: datasetTemplate.languageAge
+  };
+}
 
 export async function loadNormalizedDataset(): Promise<NormalizedDataset> {
   if (cachedDataset) return cachedDataset;
 
-  cachedDataset = (async () => {
-    const datasetTemplate = createDatasetTemplate();
-
-    const [maritalCsv, educationCsv, incomeCsv, ethnicityCsv, languageCsv] = await Promise.all([
-      loadFile("data/raw/98100128-eng/98100128.csv"),
-      loadFile("data/raw/98100384-eng/98100384.csv"),
-      loadFile("data/raw/98100064-eng/98100064.csv"),
-      loadFile("data/raw/98100351-eng/98100351.csv"),
-      loadFile("data/raw/98100222-eng/98100222.csv")
-    ]);
-
-    const maritalRows = await parseCsv<Record<string, string>>(maritalCsv);
-    const educationRows = await parseCsv<Record<string, string>>(educationCsv);
-    const incomeRows = await parseCsv<Record<string, string>>(incomeCsv);
-    const ethnicityRows = await parseCsv<Record<string, string>>(ethnicityCsv);
-    const languageRows = await parseCsv<Record<string, string>>(languageCsv);
-
-    for (const row of maritalRows) {
-      const geo = STATCAN_LABEL_TO_GEO[normalizeLabel(readColumn(row, "GEO"))];
-      const gender = mapGender(readColumn(row, "Gender (3a)"));
-      const maritalStatus = normalizeLabel(readColumn(row, "Marital status (13)"));
-
-      if (!geo || !gender || !datasetTemplate.maritalAgeGender[geo][gender][maritalStatus]) {
-        continue;
-      }
-
-      for (let index = 0; index < MARITAL_AGE_BUCKETS.length; index += 1) {
-        const bucket = MARITAL_AGE_BUCKETS[index];
-        const column = `Age (16):${bucket.label}[${index + 2}]`;
-        datasetTemplate.maritalAgeGender[geo][gender][maritalStatus][bucket.id] = toNumber(
-          readColumn(row, column)
-        );
-      }
-    }
-
-    for (const row of educationRows) {
-      const geo = STATCAN_LABEL_TO_GEO[normalizeLabel(readColumn(row, "GEO"))];
-      const gender = mapGender(readColumn(row, "Gender (3a)"));
-      const ageKey = normalizeLabel(readColumn(row, "Age (15A)")) as (typeof EDUCATION_AGE_KEYS)[number];
-      const band = mapEducationBand(readColumn(row, "Highest certificate, diploma or degree (15)"));
-
-      if (!geo || !gender || !EDUCATION_AGE_KEYS.includes(ageKey) || !band) continue;
-      if (normalizeLabel(readColumn(row, "Statistics (2A)")) !== "Count") continue;
-
-      const count = toNumber(readColumn(row, "Census year (4):2021[1]"));
-
-      if (band === "total") {
-        datasetTemplate.educationAgeGender[geo][gender][ageKey].total = count;
-        continue;
-      }
-
-      sumIntoTarget(datasetTemplate.educationAgeGender[geo][gender][ageKey], band, count);
-
-      if (band === "professional_degree" || band === "doctorate") {
-        sumIntoTarget(
-          datasetTemplate.educationAgeGender[geo][gender][ageKey],
-          "masters_plus",
-          count
-        );
-      }
-    }
-
-    for (const row of incomeRows) {
-      const geo = STATCAN_LABEL_TO_GEO[normalizeLabel(readColumn(row, "GEO"))];
-      const gender = mapGender(readColumn(row, "Gender (3a)"));
-      const ageKey = normalizeLabel(readColumn(row, "Age (11)")) as (typeof INCOME_AGE_KEYS)[number];
-      const group = normalizeLabel(readColumn(row, "Total income groups (24)"));
-      const count = toNumber(readColumn(row, "Year (2):2020[1]"));
-
-      if (!geo || !gender || !INCOME_AGE_KEYS.includes(ageKey)) continue;
-
-      if (group === "Total - Total income") {
-        datasetTemplate.incomeAgeGender[geo][gender][ageKey].total = count;
-        continue;
-      }
-
-      if (
-        group.startsWith("Median") ||
-        group.startsWith("Percentage") ||
-        group === "With total income" ||
-        group === "Without total income"
-      ) {
-        continue;
-      }
-
-      const numbers =
-        group.match(/\d[\d,]*/g)?.map((item) => Number(item.replaceAll(",", ""))) ?? [];
-      const lower = numbers[0] ?? 0;
-
-      if (lower >= 50000) datasetTemplate.incomeAgeGender[geo][gender][ageKey]["50k_plus"] += count;
-      if (lower >= 80000) datasetTemplate.incomeAgeGender[geo][gender][ageKey]["80k_plus"] += count;
-      if (lower >= 100000)
-        datasetTemplate.incomeAgeGender[geo][gender][ageKey]["100k_plus"] += count;
-      if (lower >= 150000)
-        datasetTemplate.incomeAgeGender[geo][gender][ageKey]["150k_plus"] += count;
-    }
-
-    for (const row of ethnicityRows) {
-      const geo = STATCAN_LABEL_TO_GEO[normalizeLabel(readColumn(row, "GEO"))];
-      const gender = mapGender(readColumn(row, "Gender (3)"));
-      const ageKey = normalizeLabel(readColumn(row, "Age (15C)")) as (typeof ETHNICITY_AGE_KEYS)[number];
-      const statistic = normalizeLabel(readColumn(row, "Statistics (2)"));
-
-      if (!geo || !gender || !ETHNICITY_AGE_KEYS.includes(ageKey)) continue;
-      if (statistic !== "2021 Counts") continue;
-
-      datasetTemplate.ethnicityAgeGender[geo][gender][ageKey].total = toNumber(
-        readColumn(row, "Visible minority (15):Total - Visible minority[1]")
-      );
-
-      for (const group of POPULATION_GROUPS) {
-        datasetTemplate.ethnicityAgeGender[geo][gender][ageKey][group.key] = toNumber(
-          readVisibleMinorityColumn(row, group.sourceColumn)
-        );
-      }
-    }
-
-    for (const row of languageRows) {
-      const geo = STATCAN_LABEL_TO_GEO[normalizeLabel(readColumn(row, "GEO"))];
-      const ageKey = normalizeLabel(readColumn(row, "Age (13B)")) as (typeof LANGUAGE_AGE_KEYS)[number];
-      const knowledge = normalizeLabel(readColumn(row, "Knowledge of official languages (5)"));
-      const count = toNumber(readColumn(row, "Statistics (6A):2021 Counts[1]"));
-
-      if (!geo || !LANGUAGE_AGE_KEYS.includes(ageKey)) continue;
-
-      if (knowledge === "Total - Knowledge of official languages") {
-        datasetTemplate.languageAge[geo][ageKey].total = count;
-      }
-
-      if (knowledge === "English only") {
-        datasetTemplate.languageAge[geo][ageKey].english += count;
-      }
-
-      if (knowledge === "French only") {
-        datasetTemplate.languageAge[geo][ageKey].french += count;
-      }
-
-      if (knowledge === "English and French") {
-        datasetTemplate.languageAge[geo][ageKey].bilingual += count;
-        datasetTemplate.languageAge[geo][ageKey].english += count;
-        datasetTemplate.languageAge[geo][ageKey].french += count;
-      }
-    }
-
-    return {
-      generatedLabel: `${populationEstimatesFile.referenceDate} data snapshot`,
-      populationEstimates: populationEstimatesFile.estimates,
-      ageBuckets: MARITAL_AGE_BUCKETS,
-      comparisonPlaces,
-      manualAssumptions: manualAssumptionDefinitions as ManualAssumptionDefinition[],
-      sources: {
-        population: SOURCE_CATALOG.population,
-        marital: SOURCE_CATALOG.marital,
-        education: SOURCE_CATALOG.education,
-        income: SOURCE_CATALOG.income,
-        ethnicity: SOURCE_CATALOG.ethnicity,
-        drinking: SOURCE_CATALOG.drinking,
-        height: SOURCE_CATALOG.height,
-        language: SOURCE_CATALOG.language,
-        manual: SOURCE_CATALOG.manual
-      },
-      maritalAgeGender: datasetTemplate.maritalAgeGender,
-      educationAgeGender: datasetTemplate.educationAgeGender,
-      incomeAgeGender: datasetTemplate.incomeAgeGender,
-      ethnicityAgeGender: datasetTemplate.ethnicityAgeGender,
-      drinkingRisk: drinkingRiskSurvey,
-      languageAge: datasetTemplate.languageAge
-    };
-  })();
+  cachedDataset = import("@/data/normalized/calculator-dataset.json").then(
+    (module) => module.default as NormalizedDataset
+  );
 
   return cachedDataset;
 }

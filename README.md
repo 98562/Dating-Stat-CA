@@ -96,7 +96,7 @@ They are designed to catch the kinds of calculator regressions that are easy to 
 
 ## Deployment
 
-This app is structured to deploy cleanly on Vercel.
+This app is structured to deploy cleanly on Vercel or Cloudflare Workers.
 
 Recommended environment variable:
 
@@ -121,6 +121,34 @@ Deployment flow:
 4. Deploy.
 
 No backend, auth, or database is required for the current version.
+
+### Cloudflare Workers
+
+This repo includes an OpenNext Cloudflare adapter setup:
+
+- [`open-next.config.ts`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/open-next.config.ts)
+- [`wrangler.jsonc`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/wrangler.jsonc)
+
+Important Cloudflare build settings:
+
+- install command
+  - `npm clean-install --progress=false`
+- build command
+  - `npm run cf:build`
+- deploy command
+  - `npx wrangler deploy`
+
+Why the dataset now works on Cloudflare:
+
+- the deployed app no longer tries to read raw CSV files from the filesystem at runtime
+- instead, the loader imports the committed normalized snapshot at [`data/normalized/calculator-dataset.json`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/data/normalized/calculator-dataset.json)
+- that snapshot is generated ahead of time by [`scripts/generate-calculator-dataset.ts`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/scripts/generate-calculator-dataset.ts)
+
+If raw source tables change, regenerate the bundled deployment snapshot with:
+
+```bash
+npm run data:generate
+```
 
 ## Launch mode
 
@@ -283,8 +311,9 @@ Update flow:
 1. Replace the relevant raw Statistics Canada CSV extracts in `data/raw`.
 2. Update `data/normalized/latest-population-estimates.json` if the live denominator changes.
 3. Adjust label mapping in [`lib/data/loaders.ts`](/C:/Users/Tony/Documents/Dating%20Population%20Dashboard/lib/data/loaders.ts) if StatCan changes field names or category labels.
-4. Re-run `npm run build`.
-5. Review methodology copy if the new tables change conditioning limits or reference years.
+4. Run `npm run data:generate` to refresh the bundled deployment dataset.
+5. Re-run `npm run build`.
+6. Review methodology copy if the new tables change conditioning limits or reference years.
 
 For the population-group filter specifically:
 
@@ -431,6 +460,7 @@ Recommended future approach:
 - verify `NEXT_PUBLIC_SUPPORT_URL` and any privacy email are set correctly
 - verify ads, support CTA, analytics, and consent UI remain off unless intentionally enabled
 - verify any future analytics or ad scripts match the current consent flags and privacy copy
+- verify Cloudflare uses `npm run cf:build` rather than plain `npm run build` if deploying with Workers
 - verify no under-18 path remains in the UI, readable URLs, or compact share restoration
 - verify footer links work cleanly on both desktop and mobile
 - verify the support/legal pages read well on mobile and do not contain placeholder language
