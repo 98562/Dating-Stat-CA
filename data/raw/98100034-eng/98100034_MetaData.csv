@@ -1,0 +1,215 @@
+﻿"Cube Title","Product Id","CANSIM Id",URL,"Cube Notes","Archive Status",Frequency,"Start Reference Period","End Reference Period","Total number of dimensions",Universe,"Variable List"
+"Broad age groups and sex: Canada, provinces and territories","98100034",,"https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=9810003401",,"CURRENT - a cube available to the public and that is current","Occasional","2021-01-01","2021-01-01","3","Total population, including institutional residents, 2021 Census — 100% data","Broad age groups (5), Sex (3)"
+
+"Dimension ID","Dimension name","Dimension Notes","Dimension Correction Notes","Dimension Definitions"
+"1","Geography",,,""
+"2","Broad age groups (5)",1,,""
+"3","Sex (3)",2,,""
+
+"Dimension ID","Member Name","Classification Code","Member ID","Parent Member ID",Terminated,"Member Notes","Member Correction Notes","Member Geo Attribute Keys","Member Definitions"
+"1","Canada","[11124]","1","","",,,17;3;4;5;9;10;14;15;12;13;16,
+"1","Newfoundland and Labrador","[10]","2","1","",,,17;3;4;5;9;10;14;15;12;13;16,
+"1","Prince Edward Island","[11]","3","1","",,,17;3;4;5;9;10;14;15;12;13;16,
+"1","Nova Scotia","[12]","4","1","",,,17;3;4;5;9;10;14;15;12;13;16,
+"1","New Brunswick","[13]","5","1","",,,17;3;4;5;9;10;14;15;12;13;16,
+"1","Quebec","[24]","6","1","",,,17;3;4;5;9;10;14;15;12;13;16,
+"1","Ontario","[35]","7","1","",,,17;3;4;5;9;10;14;15;12;13;16,
+"1","Manitoba","[46]","8","1","",,,17;3;4;5;9;10;14;15;12;13;16,
+"1","Saskatchewan","[47]","9","1","",,,17;3;4;5;9;10;14;15;12;13;16,
+"1","Alberta","[48]","10","1","",,,17;3;4;5;9;10;14;15;12;13;16,
+"1","British Columbia","[59]","11","1","",,,17;3;4;5;9;10;14;15;12;13;16,
+"1","Yukon","[60]","12","1","",,,17;3;4;5;9;10;14;15;12;13;16,
+"1","Northwest Territories","[61]","13","1","",,,17;3;4;5;9;10;14;15;12;13;16,
+"1","Nunavut","[62]","14","1","",,,17;3;4;5;9;10;14;15;12;13;16,
+"2","Total - Age","","1","","",,,,
+"2","0 to 14 years","","2","1","",,,,
+"2","15 to 64 years","","3","1","",,,,
+"2","65 years and over","","4","1","",,,,
+"2","85 years and over","","5","4","",,,,
+"3","Total - Sex","","1","","",,,,
+"3","Male","","2","1","",,,,
+"3","Female","","3","1","",,,,
+
+Symbol Legend
+Description,Symbol
+"not available for a specific reference period","..",
+"less than the limit of detection","<LOD",
+"value rounded to 0 (zero) where there is a meaningful distinction between true zero and the value that was rounded","0s",
+"data quality: excellent","A",
+"data quality: very good","B",
+"data quality: good","C",
+"data quality: acceptable","D",
+"use with caution","E",
+"too unreliable to be published","F",
+"not applicable","...",
+"preliminary","p",
+"revised","r",
+"suppressed to meet the confidentiality requirements of the Statistics Act","x",
+"terminated","t",
+
+"Survey Code","Survey Name"
+"3901","Census of Population"
+
+"Note ID",Note
+1,"Age    'Age' refers to the age of a person (or subject) of interest at last birthday (or relative to a specified, well-defined reference date)."
+2,"Sex at birth  Sex at birth refers to sex assigned at birth. Sex at birth is typically assigned based on a person's reproductive system and other physical characteristics.  Sex at birth may also be understood as the sex recorded at a person's birth (for example, what was recorded on their birth certificate)."
+
+"Correction ID","Correction Date","Correction Note"
+"Dimension ID","Member ID","Attribute Key",Title,Label,"Long Label",Value
+1,1,17,"TNR_SHORT_FORM","Short-form total non-response rate","Short-form total non-response rate","3.1"
+1,1,3,"ALT_GEO_CODE","Alternative geographic code","Alternative geographic code","01"
+1,1,4,"GEO_LEVEL_DESC","Geographic level","Geographic level","Country"
+1,1,5,"GEO_TYPE_ABBR","Geographic area type abbreviation","Geographic area type abbreviation","Country"
+1,1,9,"PROV_ABBR","Province or territory abbreviation","Province or territory abbreviation","..."
+1,1,10,"PR_CODE","Province or territory geocode","Province or territory geocode","01"
+1,1,14,"DQF_NOTE","Data quality note","Data quality note","Excludes census data for one or more incompletely enumerated reserves or settlements."
+1,1,15,"GEO_TYPE_DESC","Geographic area type","Geographic area type","Country"
+1,1,12,"GEO_NAME","Geography name","Geography name","Canada"
+1,1,13,"DQF_CODE","Data quality flag","Data quality flag","20000"
+1,1,16,"DGUID","Dissemination Geography Unique Identifier (DGUID)","Dissemination Geography Unique Identifier (DGUID)","2021A000011124"
+1,2,17,"TNR_SHORT_FORM","Short-form total non-response rate","Short-form total non-response rate","3.1"
+1,2,3,"ALT_GEO_CODE","Alternative geographic code","Alternative geographic code","10"
+1,2,4,"GEO_LEVEL_DESC","Geographic level","Geographic level","Province or territory"
+1,2,5,"GEO_TYPE_ABBR","Geographic area type abbreviation","Geographic area type abbreviation","PR"
+1,2,9,"PROV_ABBR","Province or territory abbreviation","Province or territory abbreviation","N.L."
+1,2,10,"PR_CODE","Province or territory geocode","Province or territory geocode","10"
+1,2,14,"DQF_NOTE","Data quality note","Data quality note","..."
+1,2,15,"GEO_TYPE_DESC","Geographic area type","Geographic area type","Province"
+1,2,12,"GEO_NAME","Geography name","Geography name","Newfoundland and Labrador"
+1,2,13,"DQF_CODE","Data quality flag","Data quality flag","00000"
+1,2,16,"DGUID","Dissemination Geography Unique Identifier (DGUID)","Dissemination Geography Unique Identifier (DGUID)","2021A000210"
+1,3,17,"TNR_SHORT_FORM","Short-form total non-response rate","Short-form total non-response rate","2.4"
+1,3,3,"ALT_GEO_CODE","Alternative geographic code","Alternative geographic code","11"
+1,3,4,"GEO_LEVEL_DESC","Geographic level","Geographic level","Province or territory"
+1,3,5,"GEO_TYPE_ABBR","Geographic area type abbreviation","Geographic area type abbreviation","PR"
+1,3,9,"PROV_ABBR","Province or territory abbreviation","Province or territory abbreviation","P.E.I."
+1,3,10,"PR_CODE","Province or territory geocode","Province or territory geocode","11"
+1,3,14,"DQF_NOTE","Data quality note","Data quality note","..."
+1,3,15,"GEO_TYPE_DESC","Geographic area type","Geographic area type","Province"
+1,3,12,"GEO_NAME","Geography name","Geography name","Prince Edward Island"
+1,3,13,"DQF_CODE","Data quality flag","Data quality flag","00000"
+1,3,16,"DGUID","Dissemination Geography Unique Identifier (DGUID)","Dissemination Geography Unique Identifier (DGUID)","2021A000211"
+1,4,17,"TNR_SHORT_FORM","Short-form total non-response rate","Short-form total non-response rate","2.9"
+1,4,3,"ALT_GEO_CODE","Alternative geographic code","Alternative geographic code","12"
+1,4,4,"GEO_LEVEL_DESC","Geographic level","Geographic level","Province or territory"
+1,4,5,"GEO_TYPE_ABBR","Geographic area type abbreviation","Geographic area type abbreviation","PR"
+1,4,9,"PROV_ABBR","Province or territory abbreviation","Province or territory abbreviation","N.S."
+1,4,10,"PR_CODE","Province or territory geocode","Province or territory geocode","12"
+1,4,14,"DQF_NOTE","Data quality note","Data quality note","..."
+1,4,15,"GEO_TYPE_DESC","Geographic area type","Geographic area type","Province"
+1,4,12,"GEO_NAME","Geography name","Geography name","Nova Scotia"
+1,4,13,"DQF_CODE","Data quality flag","Data quality flag","00000"
+1,4,16,"DGUID","Dissemination Geography Unique Identifier (DGUID)","Dissemination Geography Unique Identifier (DGUID)","2021A000212"
+1,5,17,"TNR_SHORT_FORM","Short-form total non-response rate","Short-form total non-response rate","3.2"
+1,5,3,"ALT_GEO_CODE","Alternative geographic code","Alternative geographic code","13"
+1,5,4,"GEO_LEVEL_DESC","Geographic level","Geographic level","Province or territory"
+1,5,5,"GEO_TYPE_ABBR","Geographic area type abbreviation","Geographic area type abbreviation","PR"
+1,5,9,"PROV_ABBR","Province or territory abbreviation","Province or territory abbreviation","N.B."
+1,5,10,"PR_CODE","Province or territory geocode","Province or territory geocode","13"
+1,5,14,"DQF_NOTE","Data quality note","Data quality note","..."
+1,5,15,"GEO_TYPE_DESC","Geographic area type","Geographic area type","Province"
+1,5,12,"GEO_NAME","Geography name","Geography name","New Brunswick"
+1,5,13,"DQF_CODE","Data quality flag","Data quality flag","00000"
+1,5,16,"DGUID","Dissemination Geography Unique Identifier (DGUID)","Dissemination Geography Unique Identifier (DGUID)","2021A000213"
+1,6,17,"TNR_SHORT_FORM","Short-form total non-response rate","Short-form total non-response rate","2.9"
+1,6,3,"ALT_GEO_CODE","Alternative geographic code","Alternative geographic code","24"
+1,6,4,"GEO_LEVEL_DESC","Geographic level","Geographic level","Province or territory"
+1,6,5,"GEO_TYPE_ABBR","Geographic area type abbreviation","Geographic area type abbreviation","PR"
+1,6,9,"PROV_ABBR","Province or territory abbreviation","Province or territory abbreviation","Que."
+1,6,10,"PR_CODE","Province or territory geocode","Province or territory geocode","24"
+1,6,14,"DQF_NOTE","Data quality note","Data quality note","Excludes census data for one or more incompletely enumerated reserves or settlements."
+1,6,15,"GEO_TYPE_DESC","Geographic area type","Geographic area type","Province"
+1,6,12,"GEO_NAME","Geography name","Geography name","Quebec"
+1,6,13,"DQF_CODE","Data quality flag","Data quality flag","20000"
+1,6,16,"DGUID","Dissemination Geography Unique Identifier (DGUID)","Dissemination Geography Unique Identifier (DGUID)","2021A000224"
+1,7,17,"TNR_SHORT_FORM","Short-form total non-response rate","Short-form total non-response rate","2.8"
+1,7,3,"ALT_GEO_CODE","Alternative geographic code","Alternative geographic code","35"
+1,7,4,"GEO_LEVEL_DESC","Geographic level","Geographic level","Province or territory"
+1,7,5,"GEO_TYPE_ABBR","Geographic area type abbreviation","Geographic area type abbreviation","PR"
+1,7,9,"PROV_ABBR","Province or territory abbreviation","Province or territory abbreviation","Ont."
+1,7,10,"PR_CODE","Province or territory geocode","Province or territory geocode","35"
+1,7,14,"DQF_NOTE","Data quality note","Data quality note","Excludes census data for one or more incompletely enumerated reserves or settlements."
+1,7,15,"GEO_TYPE_DESC","Geographic area type","Geographic area type","Province"
+1,7,12,"GEO_NAME","Geography name","Geography name","Ontario"
+1,7,13,"DQF_CODE","Data quality flag","Data quality flag","20000"
+1,7,16,"DGUID","Dissemination Geography Unique Identifier (DGUID)","Dissemination Geography Unique Identifier (DGUID)","2021A000235"
+1,8,17,"TNR_SHORT_FORM","Short-form total non-response rate","Short-form total non-response rate","3.5"
+1,8,3,"ALT_GEO_CODE","Alternative geographic code","Alternative geographic code","46"
+1,8,4,"GEO_LEVEL_DESC","Geographic level","Geographic level","Province or territory"
+1,8,5,"GEO_TYPE_ABBR","Geographic area type abbreviation","Geographic area type abbreviation","PR"
+1,8,9,"PROV_ABBR","Province or territory abbreviation","Province or territory abbreviation","Man."
+1,8,10,"PR_CODE","Province or territory geocode","Province or territory geocode","46"
+1,8,14,"DQF_NOTE","Data quality note","Data quality note","Excludes census data for one or more incompletely enumerated reserves or settlements."
+1,8,15,"GEO_TYPE_DESC","Geographic area type","Geographic area type","Province"
+1,8,12,"GEO_NAME","Geography name","Geography name","Manitoba"
+1,8,13,"DQF_CODE","Data quality flag","Data quality flag","20000"
+1,8,16,"DGUID","Dissemination Geography Unique Identifier (DGUID)","Dissemination Geography Unique Identifier (DGUID)","2021A000246"
+1,9,17,"TNR_SHORT_FORM","Short-form total non-response rate","Short-form total non-response rate","4.5"
+1,9,3,"ALT_GEO_CODE","Alternative geographic code","Alternative geographic code","47"
+1,9,4,"GEO_LEVEL_DESC","Geographic level","Geographic level","Province or territory"
+1,9,5,"GEO_TYPE_ABBR","Geographic area type abbreviation","Geographic area type abbreviation","PR"
+1,9,9,"PROV_ABBR","Province or territory abbreviation","Province or territory abbreviation","Sask."
+1,9,10,"PR_CODE","Province or territory geocode","Province or territory geocode","47"
+1,9,14,"DQF_NOTE","Data quality note","Data quality note","Excludes census data for one or more incompletely enumerated reserves or settlements."
+1,9,15,"GEO_TYPE_DESC","Geographic area type","Geographic area type","Province"
+1,9,12,"GEO_NAME","Geography name","Geography name","Saskatchewan"
+1,9,13,"DQF_CODE","Data quality flag","Data quality flag","20000"
+1,9,16,"DGUID","Dissemination Geography Unique Identifier (DGUID)","Dissemination Geography Unique Identifier (DGUID)","2021A000247"
+1,10,17,"TNR_SHORT_FORM","Short-form total non-response rate","Short-form total non-response rate","3.6"
+1,10,3,"ALT_GEO_CODE","Alternative geographic code","Alternative geographic code","48"
+1,10,4,"GEO_LEVEL_DESC","Geographic level","Geographic level","Province or territory"
+1,10,5,"GEO_TYPE_ABBR","Geographic area type abbreviation","Geographic area type abbreviation","PR"
+1,10,9,"PROV_ABBR","Province or territory abbreviation","Province or territory abbreviation","Alta."
+1,10,10,"PR_CODE","Province or territory geocode","Province or territory geocode","48"
+1,10,14,"DQF_NOTE","Data quality note","Data quality note","Excludes census data for one or more incompletely enumerated reserves or settlements."
+1,10,15,"GEO_TYPE_DESC","Geographic area type","Geographic area type","Province"
+1,10,12,"GEO_NAME","Geography name","Geography name","Alberta"
+1,10,13,"DQF_CODE","Data quality flag","Data quality flag","20000"
+1,10,16,"DGUID","Dissemination Geography Unique Identifier (DGUID)","Dissemination Geography Unique Identifier (DGUID)","2021A000248"
+1,11,17,"TNR_SHORT_FORM","Short-form total non-response rate","Short-form total non-response rate","3.5"
+1,11,3,"ALT_GEO_CODE","Alternative geographic code","Alternative geographic code","59"
+1,11,4,"GEO_LEVEL_DESC","Geographic level","Geographic level","Province or territory"
+1,11,5,"GEO_TYPE_ABBR","Geographic area type abbreviation","Geographic area type abbreviation","PR"
+1,11,9,"PROV_ABBR","Province or territory abbreviation","Province or territory abbreviation","B.C."
+1,11,10,"PR_CODE","Province or territory geocode","Province or territory geocode","59"
+1,11,14,"DQF_NOTE","Data quality note","Data quality note","Excludes census data for one or more incompletely enumerated reserves or settlements."
+1,11,15,"GEO_TYPE_DESC","Geographic area type","Geographic area type","Province"
+1,11,12,"GEO_NAME","Geography name","Geography name","British Columbia"
+1,11,13,"DQF_CODE","Data quality flag","Data quality flag","20000"
+1,11,16,"DGUID","Dissemination Geography Unique Identifier (DGUID)","Dissemination Geography Unique Identifier (DGUID)","2021A000259"
+1,12,17,"TNR_SHORT_FORM","Short-form total non-response rate","Short-form total non-response rate","4.3"
+1,12,3,"ALT_GEO_CODE","Alternative geographic code","Alternative geographic code","60"
+1,12,4,"GEO_LEVEL_DESC","Geographic level","Geographic level","Province or territory"
+1,12,5,"GEO_TYPE_ABBR","Geographic area type abbreviation","Geographic area type abbreviation","TERR"
+1,12,9,"PROV_ABBR","Province or territory abbreviation","Province or territory abbreviation","Y.T."
+1,12,10,"PR_CODE","Province or territory geocode","Province or territory geocode","60"
+1,12,14,"DQF_NOTE","Data quality note","Data quality note","..."
+1,12,15,"GEO_TYPE_DESC","Geographic area type","Geographic area type","Territory"
+1,12,12,"GEO_NAME","Geography name","Geography name","Yukon"
+1,12,13,"DQF_CODE","Data quality flag","Data quality flag","00000"
+1,12,16,"DGUID","Dissemination Geography Unique Identifier (DGUID)","Dissemination Geography Unique Identifier (DGUID)","2021A000260"
+1,13,17,"TNR_SHORT_FORM","Short-form total non-response rate","Short-form total non-response rate","8.2"
+1,13,3,"ALT_GEO_CODE","Alternative geographic code","Alternative geographic code","61"
+1,13,4,"GEO_LEVEL_DESC","Geographic level","Geographic level","Province or territory"
+1,13,5,"GEO_TYPE_ABBR","Geographic area type abbreviation","Geographic area type abbreviation","TERR"
+1,13,9,"PROV_ABBR","Province or territory abbreviation","Province or territory abbreviation","N.W.T."
+1,13,10,"PR_CODE","Province or territory geocode","Province or territory geocode","61"
+1,13,14,"DQF_NOTE","Data quality note","Data quality note","..."
+1,13,15,"GEO_TYPE_DESC","Geographic area type","Geographic area type","Territory"
+1,13,12,"GEO_NAME","Geography name","Geography name","Northwest Territories"
+1,13,13,"DQF_CODE","Data quality flag","Data quality flag","00000"
+1,13,16,"DGUID","Dissemination Geography Unique Identifier (DGUID)","Dissemination Geography Unique Identifier (DGUID)","2021A000261"
+1,14,17,"TNR_SHORT_FORM","Short-form total non-response rate","Short-form total non-response rate","20.2"
+1,14,3,"ALT_GEO_CODE","Alternative geographic code","Alternative geographic code","62"
+1,14,4,"GEO_LEVEL_DESC","Geographic level","Geographic level","Province or territory"
+1,14,5,"GEO_TYPE_ABBR","Geographic area type abbreviation","Geographic area type abbreviation","TERR"
+1,14,9,"PROV_ABBR","Province or territory abbreviation","Province or territory abbreviation","Nvt."
+1,14,10,"PR_CODE","Province or territory geocode","Province or territory geocode","62"
+1,14,14,"DQF_NOTE","Data quality note","Data quality note","..."
+1,14,15,"GEO_TYPE_DESC","Geographic area type","Geographic area type","Territory"
+1,14,12,"GEO_NAME","Geography name","Geography name","Nunavut"
+1,14,13,"DQF_CODE","Data quality flag","Data quality flag","02000"
+1,14,16,"DGUID","Dissemination Geography Unique Identifier (DGUID)","Dissemination Geography Unique Identifier (DGUID)","2021A000262"
+
+
+

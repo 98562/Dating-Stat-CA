@@ -1,0 +1,51 @@
+[
+  {
+    "filterId": "age",
+    "label": "Age",
+    "supportsDirectConditioningOn": ["geography"],
+    "defaultMethod": "observed",
+    "sourceId": "marital"
+  },
+  {
+    "filterId": "sex",
+    "label": "Sex / gender category",
+    "supportsDirectConditioningOn": ["geography", "age"],
+    "defaultMethod": "observed",
+    "sourceId": "marital"
+  },
+  {
+    "filterId": "maritalStatus",
+    "label": "Relationship availability proxy",
+    "supportsDirectConditioningOn": ["geography", "age", "sex"],
+    "defaultMethod": "observed",
+    "sourceId": "marital"
+  },
+  {
+    "filterId": "education",
+    "label": "Education",
+    "supportsDirectConditioningOn": ["geography", "age", "sex"],
+    "defaultMethod": "observed",
+    "sourceId": "education"
+  },
+  {
+    "filterId": "income",
+    "label": "Income",
+    "supportsDirectConditioningOn": ["geography", "age", "sex"],
+    "defaultMethod": "observed",
+    "sourceId": "income"
+  },
+  {
+    "filterId": "language",
+    "label": "Language",
+    "supportsDirectConditioningOn": ["geography", "age"],
+    "defaultMethod": "observed",
+    "sourceId": "language"
+  },
+  {
+    "filterId": "manualAssumptions",
+    "label": "Manual assumptions",
+    "supportsDirectConditioningOn": [],
+    "defaultMethod": "assumption",
+    "sourceId": "manual"
+  }
+]

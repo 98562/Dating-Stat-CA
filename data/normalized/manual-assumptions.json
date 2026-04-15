@@ -1,0 +1,20 @@
+[
+  {
+    "id": "non_smoker",
+    "label": "Non-smoker",
+    "description": "Manual preference. StatCan does not publish this inside the same dating-friendly cross-tabs used here.",
+    "defaultShare": 0.68
+  },
+  {
+    "id": "wants_children",
+    "label": "Wants children",
+    "description": "Optional assumption slider for future-family alignment.",
+    "defaultShare": 0.45
+  },
+  {
+    "id": "politically_compatible",
+    "label": "Politically compatible",
+    "description": "Useful, subjective, and very much not in the Census.",
+    "defaultShare": 0.5
+  }
+]

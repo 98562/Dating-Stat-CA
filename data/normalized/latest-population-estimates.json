@@ -1,0 +1,23 @@
+{
+  "referenceDate": "2026-01-01",
+  "sourceId": "population-estimates-2026-q1",
+  "sourceTitle": "Canada's population estimates, fourth quarter 2025",
+  "sourceUrl": "https://www150.statcan.gc.ca/n1/daily-quotidien/260318/dq260318b-eng.htm",
+  "tableId": "17-10-0009-01",
+  "estimates": {
+    "canada": { "label": "Canada", "population": 41472081 },
+    "nl": { "label": "Newfoundland and Labrador", "population": 548557 },
+    "pe": { "label": "Prince Edward Island", "population": 182001 },
+    "ns": { "label": "Nova Scotia", "population": 1090074 },
+    "nb": { "label": "New Brunswick", "population": 867383 },
+    "qc": { "label": "Quebec", "population": 9033887 },
+    "on": { "label": "Ontario", "population": 16136480 },
+    "mb": { "label": "Manitoba", "population": 1505117 },
+    "sk": { "label": "Saskatchewan", "population": 1265936 },
+    "ab": { "label": "Alberta", "population": 5048151 },
+    "bc": { "label": "British Columbia", "population": 5658528 },
+    "yt": { "label": "Yukon", "population": 48218 },
+    "nt": { "label": "Northwest Territories", "population": 45803 },
+    "nu": { "label": "Nunavut", "population": 41946 }
+  }
+}

@@ -1,0 +1,62 @@
+[
+  {
+    "label": "Charlottetown, PEI",
+    "population": 40900,
+    "source": "2021 Census population centre"
+  },
+  {
+    "label": "Whitehorse, YT",
+    "population": 31700,
+    "source": "2021 Census population centre"
+  },
+  {
+    "label": "Fredericton, NB",
+    "population": 63100,
+    "source": "2021 Census population centre"
+  },
+  {
+    "label": "Red Deer, AB",
+    "population": 100400,
+    "source": "2021 Census population centre"
+  },
+  {
+    "label": "Kingston, ON",
+    "population": 132500,
+    "source": "2021 Census population centre"
+  },
+  {
+    "label": "Kelowna, BC",
+    "population": 144600,
+    "source": "2021 Census population centre"
+  },
+  {
+    "label": "Saskatoon, SK",
+    "population": 266100,
+    "source": "2021 Census population centre"
+  },
+  {
+    "label": "Halifax, NS",
+    "population": 439800,
+    "source": "2021 Census population centre"
+  },
+  {
+    "label": "Quebec City, QC",
+    "population": 549500,
+    "source": "2021 Census population centre"
+  },
+  {
+    "label": "Winnipeg, MB",
+    "population": 749600,
+    "source": "2021 Census population centre"
+  },
+  {
+    "label": "Calgary, AB",
+    "population": 1306000,
+    "source": "2021 Census population centre"
+  },
+  {
+    "label": "Toronto, ON",
+    "population": 2794000,
+    "source": "2021 Census population centre"
+  }
+]

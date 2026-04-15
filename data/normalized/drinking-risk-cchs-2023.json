@@ -1,0 +1,134 @@
+{
+  "canada": {
+    "no_risk": 0.544,
+    "low_risk": 0.152,
+    "moderate_risk": 0.152,
+    "high_risk": 0.151
+  },
+  "sex": {
+    "all": {
+      "no_risk": 0.544,
+      "low_risk": 0.152,
+      "moderate_risk": 0.152,
+      "high_risk": 0.151
+    },
+    "men": {
+      "no_risk": 0.499,
+      "low_risk": 0.149,
+      "moderate_risk": 0.159,
+      "high_risk": 0.193
+    },
+    "women": {
+      "no_risk": 0.588,
+      "low_risk": 0.155,
+      "moderate_risk": 0.146,
+      "high_risk": 0.111
+    }
+  },
+  "age": {
+    "18 to 22 years": {
+      "no_risk": 0.671,
+      "low_risk": 0.114,
+      "moderate_risk": 0.132,
+      "high_risk": 0.084
+    },
+    "23 to 34 years": {
+      "no_risk": 0.553,
+      "low_risk": 0.146,
+      "moderate_risk": 0.158,
+      "high_risk": 0.142
+    },
+    "35 to 44 years": {
+      "no_risk": 0.519,
+      "low_risk": 0.163,
+      "moderate_risk": 0.166,
+      "high_risk": 0.151
+    },
+    "45 to 54 years": {
+      "no_risk": 0.507,
+      "low_risk": 0.167,
+      "moderate_risk": 0.16,
+      "high_risk": 0.166
+    },
+    "55 to 64 years": {
+      "no_risk": 0.507,
+      "low_risk": 0.156,
+      "moderate_risk": 0.163,
+      "high_risk": 0.174
+    },
+    "65 years and older": {
+      "no_risk": 0.569,
+      "low_risk": 0.148,
+      "moderate_risk": 0.129,
+      "high_risk": 0.154
+    }
+  },
+  "geography": {
+    "canada": {
+      "no_risk": 0.544,
+      "low_risk": 0.152,
+      "moderate_risk": 0.152,
+      "high_risk": 0.151
+    },
+    "nl": {
+      "no_risk": 0.581,
+      "low_risk": 0.131,
+      "moderate_risk": 0.147,
+      "high_risk": 0.142
+    },
+    "pe": {
+      "no_risk": 0.556,
+      "low_risk": 0.128,
+      "moderate_risk": 0.172,
+      "high_risk": 0.144
+    },
+    "ns": {
+      "no_risk": 0.566,
+      "low_risk": 0.138,
+      "moderate_risk": 0.143,
+      "high_risk": 0.152
+    },
+    "nb": {
+      "no_risk": 0.602,
+      "low_risk": 0.128,
+      "moderate_risk": 0.144,
+      "high_risk": 0.127
+    },
+    "qc": {
+      "no_risk": 0.465,
+      "low_risk": 0.163,
+      "moderate_risk": 0.19,
+      "high_risk": 0.181
+    },
+    "on": {
+      "no_risk": 0.576,
+      "low_risk": 0.149,
+      "moderate_risk": 0.135,
+      "high_risk": 0.14
+    },
+    "mb": {
+      "no_risk": 0.574,
+      "low_risk": 0.144,
+      "moderate_risk": 0.14,
+      "high_risk": 0.141
+    },
+    "sk": {
+      "no_risk": 0.588,
+      "low_risk": 0.154,
+      "moderate_risk": 0.133,
+      "high_risk": 0.125
+    },
+    "ab": {
+      "no_risk": 0.565,
+      "low_risk": 0.149,
+      "moderate_risk": 0.149,
+      "high_risk": 0.138
+    },
+    "bc": {
+      "no_risk": 0.533,
+      "low_risk": 0.156,
+      "moderate_risk": 0.152,
+      "high_risk": 0.159
+    }
+  }
+}
